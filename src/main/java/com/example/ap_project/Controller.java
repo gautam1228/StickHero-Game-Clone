@@ -10,6 +10,8 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
+    private static int Score = 0;
+//    private static Player currPlayer = new Player(xCord, YCord, Image);
     @FXML
     // All the UI-Components here.
 
@@ -25,7 +27,28 @@ public class Controller implements Initializable {
 
     @FXML
     void movePlayer(KeyEvent event){
-        
+
     }
+
+    @FXML
+    void stretchStick(KeyEvent event){
+
+    }
+
+    @FXML
+    void releaseStick(KeyEvent event){
+
+    }
+
+    // method which checks whether the stick has landed correctly on the platform or not.
+    private void stickLanded(){
+
+    }
+
+    @FXML
+    void generatePlatform(){
+
+    }
+
 
 }
