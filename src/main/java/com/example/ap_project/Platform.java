@@ -8,4 +8,7 @@ public class Platform extends Rectangle {
     private int height;
     private int XBegin;
 
+    public void generateWidth(){};
+
+    public void generateHeight(){};
 }

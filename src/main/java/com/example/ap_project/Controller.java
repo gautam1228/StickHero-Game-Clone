@@ -2,16 +2,20 @@ package com.example.ap_project;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Circle;
 
 import java.net.URL;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
     private static int Score = 0;
-//    private static Player currPlayer = new Player(xCord, YCord, Image);
+    private static Random rand = new Random();
+
+    //    private static Player currPlayer = new Player(xCord, YCord, Image);
     @FXML
     // All the UI-Components here.
 
@@ -26,17 +30,17 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    void movePlayer(KeyEvent event){
+    public void movePlayer(KeyEvent event){
 
     }
 
     @FXML
-    void stretchStick(KeyEvent event){
+    public void stretchStick(KeyEvent event){
 
     }
 
     @FXML
-    void releaseStick(KeyEvent event){
+    public void releaseStick(KeyEvent event){
 
     }
 
@@ -46,7 +50,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    void generatePlatform(){
+    private void generatePlatform(){
 
     }
 
