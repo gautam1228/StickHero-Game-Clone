@@ -5,18 +5,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ap_project.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ap_project.StartPageController">
    <children>
-      <Button fx:id="playButton" layoutX="201.0" layoutY="321.0" mnemonicParsing="false" text="PLAY">
+      <Button fx:id="playButton" layoutX="201.0" layoutY="245.0" mnemonicParsing="false" onAction="#playGame" text="PLAY">
          <font>
             <Font size="27.0" />
-         </font></Button>
-      <Label layoutX="172.0" layoutY="60.0" text="STICK">
+         </font>
+      </Button>
+      <Label layoutX="171.0" layoutY="25.0" text="STICK">
          <font>
             <Font size="62.0" />
          </font>
       </Label>
-      <Label layoutX="170.0" layoutY="150.0" text="HERO">
+      <Label layoutX="170.0" layoutY="101.0" text="HERO">
          <font>
             <Font size="62.0" />
          </font>
