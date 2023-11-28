@@ -2,25 +2,62 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ap_project.StartPageController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ap_project.StartPageController">
    <children>
-      <Button fx:id="playButton" layoutX="201.0" layoutY="245.0" mnemonicParsing="false" onAction="#playGame" text="PLAY">
+      <Button fx:id="playButton" layoutX="214.0" layoutY="255.0" mnemonicParsing="false" onAction="#playGame" text="PLAY">
          <font>
             <Font size="27.0" />
          </font>
       </Button>
-      <Label layoutX="171.0" layoutY="25.0" text="STICK">
+      <Label alignment="CENTER" layoutX="180.0" layoutY="31.0" prefHeight="90.0" prefWidth="203.0" text="STICK">
+         <font>
+            <Font size="67.0" />
+         </font>
+      </Label>
+      <Label layoutX="202.0" layoutY="101.0" text="HERO">
          <font>
             <Font size="62.0" />
          </font>
       </Label>
-      <Label layoutX="170.0" layoutY="101.0" text="HERO">
-         <font>
-            <Font size="62.0" />
-         </font>
-      </Label>
+      <Button fx:id="infoButton" layoutX="28.0" layoutY="439.0" mnemonicParsing="false" onAction="#infoPage" prefHeight="55.0" prefWidth="55.0">
+         <graphic>
+            <ImageView fitHeight="29.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Icons/info-icon.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="howToPlayButton" layoutX="28.0" layoutY="554.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0">
+         <graphic>
+            <ImageView fitHeight="29.0" fitWidth="23.0" opacity="0.65" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Icons/how-to-play.png" />
+               </image></ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="soundButton" layoutX="28.0" layoutY="663.0" mnemonicParsing="false" onAction="#soundChange" prefHeight="55.0" prefWidth="55.0">
+         <graphic>
+            <ImageView fx:id="soundStatusImage" fitHeight="29.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Icons/sound-icon.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button fx:id="playerSkinsButton" layoutX="516.0" layoutY="484.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0">
+         <graphic>
+            <ImageView fitHeight="29.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
+         </graphic>
+      </Button>
+      <Button fx:id="cherriesButton" layoutX="516.0" layoutY="594.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0">
+         <graphic>
+            <ImageView fitHeight="29.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
+         </graphic>
+      </Button>
    </children>
 </AnchorPane>

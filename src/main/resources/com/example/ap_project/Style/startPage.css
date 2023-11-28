@@ -1,5 +1,30 @@
 #playButton{
     -fx-background-radius: 5em;
-    -fx-min-width: 120px;
-    -fx-min-height: 120px;
+    -fx-min-width: 130px;
+    -fx-min-height: 130px;
+}
+#infoButton{
+    -fx-background-radius: 50em;
+    -fx-min-width: 25px;
+    -fx-min-height: 25px;
+}
+#soundButton{
+    -fx-background-radius: 50em;
+    -fx-min-width: 25px;
+    -fx-min-height: 25px;
+}
+#howToPlayButton{
+    -fx-background-radius: 50em;
+    -fx-min-width: 25px;
+    -fx-min-height: 25px;
+}
+#playerSkinsButton{
+    -fx-background-radius: 50em;
+    -fx-min-width: 25px;
+    -fx-min-height: 25px;
+}
+#cherriesButton{
+    -fx-background-radius: 50em;
+    -fx-min-width: 25px;
+    -fx-min-height: 25px;
 }
