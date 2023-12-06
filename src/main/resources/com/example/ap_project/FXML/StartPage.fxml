@@ -5,11 +5,12 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ap_project.StartPageController">
+<AnchorPane fx:id="startPage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ap_project.StartPageController">
    <children>
-      <Button fx:id="playButton" layoutX="214.0" layoutY="255.0" mnemonicParsing="false" onAction="#playGame" text="PLAY">
+      <Button fx:id="playButton" layoutX="214.0" layoutY="255.0" mnemonicParsing="false" onAction="#playButtonPressed" text="PLAY">
          <font>
             <Font size="27.0" />
          </font>
@@ -59,5 +60,11 @@
             <ImageView fitHeight="29.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
          </graphic>
       </Button>
+      <Rectangle fx:id="initialPlatform" arcHeight="5.0" arcWidth="5.0" fill="#2b2b2b" height="277.0" layoutX="214.0" layoutY="524.0" stroke="BLACK" strokeType="INSIDE" width="149.0" />
+      <ImageView fitHeight="55.0" fitWidth="46.0" layoutX="261.0" layoutY="469.0" pickOnBounds="true">
+         <image>
+            <Image url="@../Skins/Skin-1.jpg" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

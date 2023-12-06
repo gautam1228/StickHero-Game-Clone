@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.ap_project.GamePageController"
-            prefHeight="800.0" prefWidth="600.0">
-
+<AnchorPane fx:id="GamePage" prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ap_project.GamePageController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2b2b2b" height="390.0" layoutY="411.0" stroke="BLACK" strokeType="INSIDE" width="155.0" />
+      <ImageView fx:id="player" fitHeight="55.0" fitWidth="46.0" layoutX="55.0" layoutY="356.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Skins/Skin-1.jpg" />
+         </image>
+      </ImageView>
+   </children>
 </AnchorPane>

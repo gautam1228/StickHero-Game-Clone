@@ -1,6 +1,6 @@
 package com.example.ap_project;
 
-import javafx.application.Application;
+import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,9 +12,10 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,11 +29,16 @@ public class StartPageController implements Initializable {
     private Scene scene;
 
     @FXML
+    private AnchorPane startPage;
+    @FXML
     private ImageView soundStatusImage;
     @FXML
     private Button soundButton;
-    Image muted ;
-    Image unmuted ;
+    @FXML
+    private Rectangle initialPlatform;
+
+    private Image muted;
+    private Image unmuted;
     private boolean Mute;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -40,14 +46,41 @@ public class StartPageController implements Initializable {
         muted = new Image(Objects.requireNonNull(getClass().getResourceAsStream("Icons/no-sound-icon.png")));
         unmuted = new Image(Objects.requireNonNull(getClass().getResourceAsStream("Icons/sound-icon.png")));
     }
+    @FXML
+    public void playButtonPressed(ActionEvent event){
 
+        FadeTransition fadeTransition = new FadeTransition();
+        fadeTransition.setDuration(Duration.millis(1000));
+        fadeTransition.setNode(startPage);
+        fadeTransition.setFromValue(1);
+        fadeTransition.setToValue(0);
+        fadeTransition.play();
+
+        fadeTransition.setOnFinished((ActionEvent eventNew) -> {
+            try {
+                loadGamePage(event);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+    }
     // Play-Game-Button
-    public void playGame(ActionEvent event) throws IOException {
+    private void loadGamePage(ActionEvent event) throws IOException {
+        FXMLLoader gamePageLoader = new FXMLLoader(getClass().getResource("FXML/GamePage.fxml"));
+        Parent root = gamePageLoader.load();
 
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("FXML/GamePage.fxml")));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
+        // Retrieve the current stage
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+
+        // Pass the entire Stage to GamePageController
+        GamePageController gamePageController = gamePageLoader.getController();
+        gamePageController.setStage(stage);
+
+        Scene scene = new Scene(root);
         stage.setScene(scene);
+
+
         stage.show();
 
     }
