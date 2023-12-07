@@ -50,12 +50,12 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <Button fx:id="playerSkinsButton" layoutX="516.0" layoutY="484.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0">
+      <Button fx:id="playerSkinsButton" layoutX="516.0" layoutY="484.0" mnemonicParsing="false" onAction="#skinsPage" prefHeight="55.0" prefWidth="55.0">
          <graphic>
             <ImageView fitHeight="29.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
          </graphic>
       </Button>
-      <Button fx:id="cherriesButton" layoutX="516.0" layoutY="594.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0">
+      <Button fx:id="cherriesButton" layoutX="516.0" layoutY="594.0" mnemonicParsing="false" onAction="#cherriesPage" prefHeight="55.0" prefWidth="55.0">
          <graphic>
             <ImageView fitHeight="29.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
          </graphic>
