@@ -238,18 +238,18 @@ public class StartPageController implements Initializable {
             } else {
                 int finalI = i;
                 lockButton.setOnAction(e -> {
-//                    int userCherries = Player.getInstance().getAvailableCherries();
-//                    if (userCherries >= 10) {
-//                        Player.getInstance().setAvailableCherries(userCherries - 10);
-//                        lockButton.setText("Equip");
-//                        lockButton.setOnAction(equipEvent -> {
-//                            // Handle dress equip action here
-//                            // You may want to navigate back to the main page or perform other actions
-//                            skinPageStage.close();
-//                        });
-//
-//                        unlockedSkins.add(finalI);
-//                    }
+                    int userCherries = Player.getInstance().getAvailableCherries();
+                    if (userCherries >= 10) {
+                        Player.getInstance().setAvailableCherries(userCherries - 10);
+                        lockButton.setText("Equip");
+                        lockButton.setOnAction(equipEvent -> {
+                            // Handle dress equip action here
+                            // You may want to navigate back to the main page or perform other actions
+                            skinPageStage.close();
+                        });
+
+                        unlockedSkins.add(finalI);
+                    }
                 });
             }
         }
@@ -308,13 +308,13 @@ public class StartPageController implements Initializable {
             cherryBoxVBox.setAlignment(Pos.CENTER);
 
             cherriesBox.getChildren().add(cherryBoxVBox);
-            //addedCherriesLabel.setText("Available Cherries: " + Player.getInstance().getAvailableCherries());
+            addedCherriesLabel.setText("Available Cherries: " + Player.getInstance().getAvailableCherries());
             buyButton.setOnAction(e -> {
                 Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to buy cherries?", ButtonType.YES, ButtonType.NO);
                 confirmDialog.showAndWait().ifPresent(response -> {
                     if (response == ButtonType.YES) {
-                        //Player.getInstance().addAvailableCherries(cherryValue);
-                        //addedCherriesLabel.setText("Available Cherries: " + Player.getInstance().getAvailableCherries());
+                        Player.getInstance().addAvailableCherries(cherryValue);
+                        addedCherriesLabel.setText("Available Cherries: " + Player.getInstance().getAvailableCherries());
                         System.out.println("Cherries bought!");
                     }
                 });
