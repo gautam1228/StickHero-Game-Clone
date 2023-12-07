@@ -24,6 +24,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Objects;
@@ -44,15 +45,19 @@ public class StartPageController implements Initializable {
     private Button soundButton;
     @FXML
     private Rectangle initialPlatform;
-
+    @FXML
+    private ImageView playerView;
     private Image muted;
     private Image unmuted;
     private boolean Mute;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         Mute = false;
         muted = new Image(Objects.requireNonNull(getClass().getResourceAsStream("Icons/no-sound-icon.png")));
         unmuted = new Image(Objects.requireNonNull(getClass().getResourceAsStream("Icons/sound-icon.png")));
+        playerView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Skins/Skin-Default.jpg"))));
+
     }
     @FXML
     public void playButtonPressed(ActionEvent event){
@@ -183,11 +188,11 @@ public class StartPageController implements Initializable {
     public void skinsPage(ActionEvent event) throws IOException {
         Stage skinPageStage = new Stage();
         skinPageStage.initModality(Modality.APPLICATION_MODAL);
-        skinPageStage.setTitle("Choose Dress");
+        skinPageStage.setTitle("Choose Skin");
 
         AnchorPane skinPageLayout = new AnchorPane();
 
-        Label titleLabel = new Label("Choose Dress");
+        Label titleLabel = new Label("Choose Skin");
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
         AnchorPane.setTopAnchor(titleLabel, 10.0);
         AnchorPane.setLeftAnchor(titleLabel, 10.0);
@@ -198,50 +203,49 @@ public class StartPageController implements Initializable {
 
         for (int i = 1; i <= 6; i++) {
 
-            Image unlockedSkinImage = new Image(getClass().getResourceAsStream("Icons/ch" + i + ".jpg"));
+            Image unlockedSkinImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("Locked-Skins/sk" + i + ".jpg")));
 
             double width = 500;
             double proportionalHeight = width / unlockedSkinImage.getWidth() * unlockedSkinImage.getHeight();
 
-            ImageView dressImage = new ImageView(unlockedSkinImage);
-            dressImage.setFitWidth(width);
-            dressImage.setFitHeight(proportionalHeight);
-            dressImage.setPreserveRatio(true);
+            ImageView skinImage = new ImageView(unlockedSkinImage);
+            skinImage.setFitWidth(width);
+            skinImage.setFitHeight(proportionalHeight);
+            skinImage.setPreserveRatio(true);
 
-            Button lockButton = new Button("Lock");
-            lockButton.setStyle("-fx-font-size: 25px;");
+            Button unlockButton = new Button("Unlock");
+            unlockButton.setStyle("-fx-font-size: 25px;");
 
             Label priceLabel = new Label("Price: 10 cherries");
 
             StackPane imageContainer = new StackPane();
-            imageContainer.getChildren().add(dressImage);
+            imageContainer.getChildren().add(skinImage);
 
-            VBox dressBox = new VBox(5);
-            dressBox.getChildren().addAll(imageContainer, lockButton, priceLabel);
-            dressBox.setAlignment(Pos.CENTER);
+            VBox skinsBox = new VBox(5);
+            skinsBox.getChildren().addAll(imageContainer, unlockButton, priceLabel);
+            skinsBox.setAlignment(Pos.CENTER);
 
-            dressesBox.getChildren().add(dressBox);
+            dressesBox.getChildren().add(skinsBox);
 
             if (unlockedSkins.contains(i)) {
-                lockButton.setText("Equip");
-                lockButton.setOnAction(equipEvent -> {
-                    // Handle dress equip action here
-                    // You may want to navigate back to the main page or perform other actions
-                    skinPageStage.close();
+                unlockButton.setText("Equipped");
+                int finalI1 = i;
+                unlockButton.setOnAction(equipEvent -> {
+                    // Equipping Skin.
                 });
             } else {
                 int finalI = i;
-                lockButton.setOnAction(e -> {
+                unlockButton.setOnAction(e -> {
                     int userCherries = Player.getInstance().getAvailableCherries();
                     if (userCherries >= 10) {
                         Player.getInstance().setAvailableCherries(userCherries - 10);
-                        lockButton.setText("Equip");
-                        lockButton.setOnAction(equipEvent -> {
-                            // Handle dress equip action here
-                            // You may want to navigate back to the main page or perform other actions
+                        unlockButton.setText("Equip");
+                        unlockButton.setOnAction(equipEvent -> {
+                            System.out.println("Skin :" + finalI + " bought.");
+                            playerView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Skins/Skin-" + finalI + ".jpg"))));
+                            Main.currPlayerInstance.setCurrentSkin(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Skins/Skin-" + finalI + ".jpg"))));
                             skinPageStage.close();
                         });
-
                         unlockedSkins.add(finalI);
                     }
                 });
@@ -286,7 +290,7 @@ public class StartPageController implements Initializable {
 
         for (int i = 1; i <= 5; i++) {
 
-            Image cherryImage = new Image(getClass().getResourceAsStream("Icons/cherries.png"));
+            Image cherryImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("Icons/cherries.png")));
 
             ImageView cherryImageView = new ImageView(cherryImage);
             cherryImageView.setFitWidth(120);

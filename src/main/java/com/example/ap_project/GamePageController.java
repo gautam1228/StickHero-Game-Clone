@@ -2,15 +2,16 @@ package com.example.ap_project;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
-import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Point3D;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -23,16 +24,23 @@ public class GamePageController implements Initializable {
     private Stage stage;
     @FXML
     private AnchorPane GamePage;
-    Timeline extendTimeline;
+    @FXML
+    private ImageView playerViewGamePage;
+    private Timeline extendTimeline;
     private Stick currentStick;
+    private Player currPlayer;
+    private double distanceToBeMoved;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        currPlayer = Player.getInstance();
         boolean spaceKeyPressed = false;
-        Platform nextPlatform = new Platform();
+        Pillar nextPillar = new Pillar();
         currentStick = new Stick();
-        nextPlatform.addToPane(GamePage);
+        nextPillar.addToPane(GamePage);
         GamePage.getChildren().add(currentStick);
+        playerViewGamePage.setImage(currPlayer.getCurrentSkin());
     }
     // Method to set the stage
     public void setStage(Stage stage) {
@@ -75,14 +83,42 @@ public class GamePageController implements Initializable {
     private void stopExtendingStick() {
         if (extendTimeline != null) {
             extendTimeline.stop();
-            // Handle any other logic you need when stopping the extension
-            Rotate rotate = new Rotate(0, 125,411);
-            currentStick.getTransforms().add(rotate);
-            Timeline timeline = new Timeline(
-                    new KeyFrame(Duration.millis(500), new KeyValue(rotate.angleProperty(), 90))
-            );
-            timeline.setCycleCount(1);
-            timeline.play();
+            // Creating a different thread to first calculate the length to which stick was extended and then update the UI.
+            new Thread(()->{
+
+                synchronized (this){
+                    distanceToBeMoved = 413 + 55 - currentStick.getStartY(); // added the 50 because it's the image width.
+                }
+
+                System.out.println("Player has to move by : " + distanceToBeMoved);
+
+                // Updating UI Elements.
+                Platform.runLater(()->{
+                    Rotate rotate = new Rotate(0, 125,411);
+                    currentStick.getTransforms().add(rotate);
+
+                    Translate translate = new Translate();
+                    translate.setX(0);
+                    translate.setY(0);
+                    playerViewGamePage.getTransforms().add(translate);
+
+                    KeyFrame rotateKeyFrame = new KeyFrame(Duration.millis(500), new KeyValue(rotate.angleProperty(), 90));
+
+                    KeyFrame translateKeyFrame = new KeyFrame(Duration.millis(1000), new KeyValue(translate.xProperty(), distanceToBeMoved));
+
+                    Timeline timeline = new Timeline();
+                    timeline.getKeyFrames().addAll(rotateKeyFrame);
+                    timeline.setCycleCount(1);
+                    timeline.setOnFinished(event->{
+                        timeline.getKeyFrames().clear();
+                        timeline.getKeyFrames().add(translateKeyFrame);
+                        timeline.play();
+                    });
+                    timeline.play();
+
+                });
+            }).start();
+
         }
     }
 

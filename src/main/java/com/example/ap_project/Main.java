@@ -8,13 +8,14 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 
 public class Main extends Application {
+    public static Player currPlayerInstance = Player.getInstance();
     @Override
     public void start(Stage mainStage) throws Exception {
         try {
-
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("FXML/StartPage.fxml")));
             Scene scene = new Scene(root);
 
@@ -27,7 +28,7 @@ public class Main extends Application {
             mainStage.setResizable(false);
 
             // Setting the icon for the main-mainStage
-            Image gameIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("icons/game-icon.png")));
+            Image gameIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("Icons/game-icon.png")));
             mainStage.getIcons().add(gameIcon);
             mainStage.initStyle(StageStyle.TRANSPARENT);
 
@@ -39,10 +40,10 @@ public class Main extends Application {
         }
     }
     public static void main(String[] args) {
-        Player playerInstance1 = Player.getInstance();
+        Player currPlayer = currPlayerInstance;
         //new resources added
-        // Set and get available cherries
-        playerInstance1.setAvailableCherries(10);
+        // Setting current cherries to 10.
+        currPlayer.setAvailableCherries(10);
         launch(args);
     }
 

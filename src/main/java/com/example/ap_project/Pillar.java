@@ -2,13 +2,12 @@ package com.example.ap_project;
 
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.util.Random;
 
-public class Platform extends Node {
+public class Pillar extends Node {
 
     private static final int PLATFORM_WIDTH = 155;
     private static final int PLATFORM_HEIGHT = 390;
@@ -17,7 +16,7 @@ public class Platform extends Node {
 
     private Rectangle platform;
 
-    public Platform() {
+    public Pillar() {
         generatePlatform();
     }
 
@@ -46,8 +45,8 @@ public class Platform extends Node {
         pane.getChildren().add(platform);
     }
 
-    public void removeFromPane(AnchorPane pane, Platform platformToBeRemoved){
-        pane.getChildren().remove(platformToBeRemoved);
+    public void removeFromPane(AnchorPane pane, Pillar pillarToBeRemoved){
+        pane.getChildren().remove(pillarToBeRemoved);
     }
 
     private void setFillColor(String hexColor) {
