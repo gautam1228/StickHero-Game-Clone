@@ -204,7 +204,7 @@ public class StartPageController implements Initializable {
 
         for (int i = 1; i <= 6; i++) {
 
-            Image unlockedSkinImage = new Image(getClass().getResourceAsStream("Skins/Skin-" + i + ".jpg"));
+            Image unlockedSkinImage = new Image(getClass().getResourceAsStream("Icons/ch" + i + ".jpg"));
 
             double width = 500;
             double proportionalHeight = width / unlockedSkinImage.getWidth() * unlockedSkinImage.getHeight();
