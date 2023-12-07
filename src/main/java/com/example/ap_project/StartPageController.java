@@ -109,13 +109,7 @@ public class StartPageController implements Initializable {
 
     // Info-Page-Button
     public void infoPage(ActionEvent event) throws IOException {
-//        Button closeButton = new Button("Close.");
-////        closeButton.setLayoutX();
-////        closeButton.setLayoutY();
-//        closeButton.setOnAction( e -> {
-//            popUpInfoPage.close();
-//        });
-//
+
         Stage popUpInfoPage = new Stage();
         //popUpInfoPage.initStyle(StageStyle.UNDECORATED);
         popUpInfoPage.initModality(Modality.APPLICATION_MODAL);
