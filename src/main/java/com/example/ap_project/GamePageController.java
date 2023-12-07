@@ -65,7 +65,7 @@ public class GamePageController implements Initializable {
         extendTimeline = new Timeline(new KeyFrame(
                 Duration.millis(10), // Duration at which the height will be updated
                 event -> {
-                    currentStick.extend(8);
+                    currentStick.extend(3);
                 }
         ));
         extendTimeline.setCycleCount(Timeline.INDEFINITE); // Running indefinitely until key release
