@@ -5,24 +5,33 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class StartPageController implements Initializable {
 
@@ -178,6 +187,93 @@ public class StartPageController implements Initializable {
         popUpInfoPage.setScene(popupScene);
 
         popUpInfoPage.show();
+    }
+    private Set<Integer> unlockedSkins = new HashSet<>();
+    public void skinsPage(ActionEvent event) throws IOException {
+        Stage skinPageStage = new Stage();
+        skinPageStage.initModality(Modality.APPLICATION_MODAL);
+        skinPageStage.setTitle("Choose Dress");
+
+        AnchorPane skinPageLayout = new AnchorPane();
+
+        Label titleLabel = new Label("Choose Dress");
+        titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        AnchorPane.setTopAnchor(titleLabel, 10.0);
+        AnchorPane.setLeftAnchor(titleLabel, 10.0);
+        skinPageLayout.getChildren().add(titleLabel);
+
+        HBox dressesBox = new HBox(10);
+        dressesBox.setPrefHeight(10);
+
+        for (int i = 3; i <= 8; i++) {
+
+            Image unlockedSkinImage = new Image(getClass().getResourceAsStream("Icons/character" + i + ".png"));
+
+            double width = 500;
+            double proportionalHeight = width / unlockedSkinImage.getWidth() * unlockedSkinImage.getHeight();
+
+            ImageView dressImage = new ImageView(unlockedSkinImage);
+            dressImage.setFitWidth(width);
+            dressImage.setFitHeight(proportionalHeight);
+            dressImage.setPreserveRatio(true);
+
+            Button lockButton = new Button("Lock");
+            lockButton.setStyle("-fx-font-size: 25px;");
+
+            Label priceLabel = new Label("Price: 10 cherries");
+
+            StackPane imageContainer = new StackPane();
+            imageContainer.getChildren().add(dressImage);
+
+            VBox dressBox = new VBox(5);
+            dressBox.getChildren().addAll(imageContainer, lockButton, priceLabel);
+            dressBox.setAlignment(Pos.CENTER);
+
+            dressesBox.getChildren().add(dressBox);
+
+            if (unlockedSkins.contains(i)) {
+                lockButton.setText("Equip");
+                lockButton.setOnAction(equipEvent -> {
+                    // Handle dress equip action here
+                    // You may want to navigate back to the main page or perform other actions
+                    skinPageStage.close();
+                });
+            } else {
+                int finalI = i;
+                lockButton.setOnAction(e -> {
+//                    int userCherries = Player.getInstance().getAvailableCherries();
+//                    if (userCherries >= 10) {
+//                        Player.getInstance().setAvailableCherries(userCherries - 10);
+//                        lockButton.setText("Equip");
+//                        lockButton.setOnAction(equipEvent -> {
+//                            // Handle dress equip action here
+//                            // You may want to navigate back to the main page or perform other actions
+//                            skinPageStage.close();
+//                        });
+//
+//                        unlockedSkins.add(finalI);
+//                    }
+                });
+            }
+        }
+
+
+
+        skinPageLayout.getChildren().add(dressesBox);
+
+        ScrollPane scrollPane = new ScrollPane(dressesBox);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        AnchorPane.setTopAnchor(scrollPane, 10.0);
+        AnchorPane.setBottomAnchor(scrollPane, 10.0);
+        AnchorPane.setLeftAnchor(scrollPane, 10.0);
+        AnchorPane.setRightAnchor(scrollPane, 10.0);
+        skinPageLayout.getChildren().add(scrollPane);
+        Scene dressPageScene = new Scene(skinPageLayout, 600, 450);
+        skinPageStage.setScene(dressPageScene);
+
+        skinPageStage.show();
+
     }
 
 }
