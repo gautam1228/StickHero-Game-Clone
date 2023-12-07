@@ -40,7 +40,7 @@ public class Main extends Application {
     }
     public static void main(String[] args) {
         Player playerInstance1 = Player.getInstance();
-
+        //new resources added
         // Set and get available cherries
         playerInstance1.setAvailableCherries(10);
         launch(args);
