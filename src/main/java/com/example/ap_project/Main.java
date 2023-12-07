@@ -39,6 +39,10 @@ public class Main extends Application {
         }
     }
     public static void main(String[] args) {
+        Player playerInstance1 = Player.getInstance();
+
+        // Set and get available cherries
+        playerInstance1.setAvailableCherries(10);
         launch(args);
     }
 
