@@ -9,10 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -274,6 +271,69 @@ public class StartPageController implements Initializable {
 
         skinPageStage.show();
 
+    }
+    public void cherriesPage(ActionEvent event) throws IOException {
+        Stage cherriesPageStage = new Stage();
+        cherriesPageStage.initModality(Modality.APPLICATION_MODAL);
+        cherriesPageStage.setTitle("Buy Cherries");
+
+        AnchorPane cherriesPageLayout = new AnchorPane();
+        Label titleLabel = new Label("Buy Cherries");
+        titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        AnchorPane.setTopAnchor(titleLabel, 10.0);
+        AnchorPane.setLeftAnchor(titleLabel, 10.0);
+        cherriesPageLayout.getChildren().add(titleLabel);
+        HBox cherriesBox = new HBox(25);
+        cherriesBox.setPrefHeight(200);
+
+        Label addedCherriesLabel = new Label("Added Cherries: 0");
+        AnchorPane.setBottomAnchor(addedCherriesLabel, 10.0);
+        cherriesPageLayout.getChildren().add(addedCherriesLabel);
+
+        for (int i = 1; i <= 5; i++) {
+
+            Image cherryImage = new Image(getClass().getResourceAsStream("Icons/cherries.png"));
+
+            ImageView cherryImageView = new ImageView(cherryImage);
+            cherryImageView.setFitWidth(120);
+            cherryImageView.setFitHeight(120);
+            cherryImageView.setPreserveRatio(true);
+
+            int cherryValue = i * 5;
+            Button buyButton = new Button("Buy\n" + cherryValue + " Cherries");
+            buyButton.setStyle("-fx-font-size: 15px;");
+
+            VBox cherryBoxVBox = new VBox(15);
+            cherryBoxVBox.getChildren().addAll(cherryImageView, buyButton);
+            cherryBoxVBox.setAlignment(Pos.CENTER);
+
+            cherriesBox.getChildren().add(cherryBoxVBox);
+            //addedCherriesLabel.setText("Available Cherries: " + Player.getInstance().getAvailableCherries());
+            buyButton.setOnAction(e -> {
+                Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to buy cherries?", ButtonType.YES, ButtonType.NO);
+                confirmDialog.showAndWait().ifPresent(response -> {
+                    if (response == ButtonType.YES) {
+                        //Player.getInstance().addAvailableCherries(cherryValue);
+                        //addedCherriesLabel.setText("Available Cherries: " + Player.getInstance().getAvailableCherries());
+                        System.out.println("Cherries bought!");
+                    }
+                });
+            });
+        }
+        ScrollPane cherriesScrollPane = new ScrollPane(cherriesBox);
+        cherriesScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        cherriesScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        AnchorPane.setTopAnchor(cherriesScrollPane, 50.0);
+        AnchorPane.setBottomAnchor(cherriesScrollPane, 70.0);
+        AnchorPane.setLeftAnchor(cherriesScrollPane, 10.0);
+        AnchorPane.setRightAnchor(cherriesScrollPane, 10.0);
+        cherriesPageLayout.getChildren().add(cherriesScrollPane);
+
+        Scene cherriesPageScene = new Scene(cherriesPageLayout, 600, 350);
+        cherriesPageStage.setScene(cherriesPageScene);
+
+        cherriesPageStage.show();
     }
 
 }
