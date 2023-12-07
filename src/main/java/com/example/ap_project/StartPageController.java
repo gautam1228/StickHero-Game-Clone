@@ -9,6 +9,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -100,30 +102,82 @@ public class StartPageController implements Initializable {
     }
 
     // Info-Page-Button
-    public void infoPage(ActionEvent event) throws IOException{
-
+    public void infoPage(ActionEvent event) throws IOException {
+//        Button closeButton = new Button("Close.");
+////        closeButton.setLayoutX();
+////        closeButton.setLayoutY();
+//        closeButton.setOnAction( e -> {
+//            popUpInfoPage.close();
+//        });
+//
         Stage popUpInfoPage = new Stage();
-//        popUpInfoPage.initStyle(StageStyle.UNDECORATED);
+        //popUpInfoPage.initStyle(StageStyle.UNDECORATED);
         popUpInfoPage.initModality(Modality.APPLICATION_MODAL);
-        popUpInfoPage.setTitle("Info Page.");
+        popUpInfoPage.setTitle("Info Page");
 
         AnchorPane infoPageLayout = new AnchorPane();
-        Button closeButton = new Button("Close.");
-//        closeButton.setLayoutX();
-//        closeButton.setLayoutY();
-        closeButton.setOnAction( e -> {
+
+        TextArea termsAndConditionsTextArea = new TextArea();
+        termsAndConditionsTextArea.setText(
+                "**Game Terms and Conditions**\n" +
+                        "\n" +
+                        "Welcome to Stick Hero!\n" +
+                        "\n" +
+                        "By using or accessing Stick Hero, you agree to comply with and be bound by the following terms and conditions of use. If you do not agree to these terms, please do not use the Game.\n" +
+                        "\n" +
+                        "1. **User Agreement**\n" +
+                        "   a. *Fair Play:* Users are expected to play the Game fairly and in accordance with the rules and guidelines provided within the Game.\n" +
+                        "   b. *Cheating:* Any form of cheating, hacking, or exploiting the Game's mechanics is strictly prohibited.\n" +
+                        "   c. *Respect:* Users are expected to treat other players with respect and refrain from engaging in any form of harassment, discrimination, or offensive behavior.\n" +
+                        "\n" +
+                        "2. **Gameplay**\n" +
+                        "   a. *Account Creation:* Users may be required to create an account to access certain features of the Game. You are responsible for maintaining the confidentiality of your account information.\n" +
+                        "   b. *Age Restriction:* The Game is intended for users who are at least 9 years old. If you are under the specified age, please discontinue use of the Game.\n" +
+                        "\n" +
+                        "3. **User Accounts**\n" +
+                        "   a. *Ownership:* All intellectual property rights related to the Game, including but not limited to trademarks, copyrights, and patents, are owned by Ketchapp.\n" +
+                        "   b. *User Content:* By submitting any content (e.g., usernames, comments) to the Game, you grant Ketchapp a worldwide, royalty-free, non-exclusive license to use, reproduce, modify, adapt, publish, translate, distribute, and display such content.\n" +
+                        "\n" +
+                        "4. **Intellectual Property**\n" +
+                        "   Ketchapp is not liable for any direct, indirect, incidental, special, or consequential damages resulting from the use or inability to use the Game.\n" +
+                        "\n" +
+                        "5. **Limitation of Liability**\n" +
+                        "   Ketchapp reserves the right to update or modify these terms and conditions at any time. Users are encouraged to review this page periodically for any changes.\n" +
+                        "\n" +
+                        "6. **Modifications to Terms**\n" +
+                        "   These terms and conditions are governed by and construed in accordance with the laws of Govt. of India."
+        );
+
+        termsAndConditionsTextArea.setWrapText(true);
+        termsAndConditionsTextArea.setEditable(false);
+
+        ScrollPane scrollPane = new ScrollPane(termsAndConditionsTextArea);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setFitToWidth(true);
+
+        scrollPane.setPrefSize(400, 400);
+
+        infoPageLayout.getChildren().add(scrollPane);
+
+        Button okButton = new Button("AGREE");
+        okButton.setOnAction(e -> {
             popUpInfoPage.close();
         });
 
-        infoPageLayout.getChildren().add(closeButton);
+        infoPageLayout.getChildren().add(okButton);
 
+        AnchorPane.setBottomAnchor(okButton, 10.0);
+        AnchorPane.setRightAnchor(okButton, 10.0);
+
+        AnchorPane.setTopAnchor(scrollPane, 10.0);
+        AnchorPane.setBottomAnchor(scrollPane, 50.0);
+        AnchorPane.setLeftAnchor(scrollPane, 10.0);
+        AnchorPane.setRightAnchor(scrollPane, 10.0);
 
         Scene popupScene = new Scene(infoPageLayout, 400, 600);
-
         popUpInfoPage.setScene(popupScene);
 
         popUpInfoPage.show();
-
     }
 
 }
