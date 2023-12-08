@@ -24,7 +24,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Objects;
@@ -252,10 +251,7 @@ public class StartPageController implements Initializable {
             }
         }
 
-
-
         skinPageLayout.getChildren().add(dressesBox);
-
         ScrollPane scrollPane = new ScrollPane(dressesBox);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -327,6 +323,13 @@ public class StartPageController implements Initializable {
         AnchorPane.setLeftAnchor(cherriesScrollPane, 10.0);
         AnchorPane.setRightAnchor(cherriesScrollPane, 10.0);
         cherriesPageLayout.getChildren().add(cherriesScrollPane);
+        Button backButton = new Button("Back");
+        backButton.setOnAction(e -> cherriesPageStage.close());
+        AnchorPane.setBottomAnchor(backButton, 10.0);
+        AnchorPane.setRightAnchor(backButton, 10.0);
+        backButton.setPrefSize(80, 40);
+        cherriesPageLayout.getChildren().add(backButton);
+
 
         Scene cherriesPageScene = new Scene(cherriesPageLayout, 600, 350);
         cherriesPageStage.setScene(cherriesPageScene);
