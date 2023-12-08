@@ -227,10 +227,13 @@ public class StartPageController implements Initializable {
             dressesBox.getChildren().add(skinsBox);
 
             if (unlockedSkins.contains(i)) {
-                unlockButton.setText("Equipped");
+                unlockButton.setText("Equip");
                 int finalI1 = i;
                 unlockButton.setOnAction(equipEvent -> {
-                    // Equipping Skin.
+                    //System.out.println("Skin :" + finalI + " bought.");
+                    playerView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Skins/Skin-" + finalI1 + ".jpg"))));
+                    Main.currPlayerInstance.setCurrentSkin(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Skins/Skin-" + finalI1 + ".jpg"))));
+                    skinPageStage.close();
                 });
             } else {
                 int finalI = i;
