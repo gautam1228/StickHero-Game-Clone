@@ -191,6 +191,8 @@ public class StartPageController implements Initializable {
 
         AnchorPane skinPageLayout = new AnchorPane();
 
+
+
         Label titleLabel = new Label("Choose Skin");
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
         AnchorPane.setTopAnchor(titleLabel, 10.0);
@@ -249,6 +251,24 @@ public class StartPageController implements Initializable {
                             skinPageStage.close();
                         });
                         unlockedSkins.add(finalI);
+                    }
+                    else {
+                        Alert alert = new Alert(Alert.AlertType.WARNING, "Not enough cherries!", ButtonType.OK, ButtonType.CANCEL);
+                        ButtonType cherriesPageButton = new ButtonType("Buy Cherries");
+                        alert.getButtonTypes().add(cherriesPageButton);
+
+                        alert.showAndWait().ifPresent(response -> {
+                            if (response == ButtonType.OK) {
+                                alert.close();
+                            } else if (response == cherriesPageButton) {
+                                alert.close();
+                                try {
+                                    cherriesPage(null);
+                                } catch (IOException e1) {
+                                    e1.printStackTrace();
+                                }
+                            }
+                        });
                     }
                 });
             }
