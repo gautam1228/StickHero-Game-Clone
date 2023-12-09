@@ -53,7 +53,7 @@ public class Main extends Application {
             System.out.println(failure.toString());
         }
         if(result.wasSuccessful()) {
-            System.out.println("junit tested succesful:-");
+            System.out.println("Junit tested successful : -");
             System.out.println("1. singleton design pattern tested");
             System.out.println("2. player class methods functionality tested");
         }

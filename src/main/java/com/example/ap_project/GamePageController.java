@@ -151,23 +151,15 @@ public class GamePageController implements Initializable {
             timeline.play();
             playerMoving = true;
             playerViewGamePage.setFocusTraversable(true);
+            System.out.println("Can Invert now....");
             playerViewGamePage.setOnKeyPressed(spaceKeyPressedAgain->{
-
                 if(spaceKeyPressedAgain.getCode() == KeyCode.SPACE && playerMoving && !playerInverted && playerIsBetween(currentPillar.getX() + currentPillar.getWidth(), nextPillar.getX())){
-                    System.out.println("X coords of initial pillar : " + currentPillar.getBoundsInParent().getMinX());
-                    System.out.println("X coords of next pillar : " + nextPillar.getBoundsInParent().getMinX());
-                    System.out.println("X coords of player : " + playerViewGamePage.getBoundsInParent().getMinX());
-                    System.out.println("X coords of player : " + playerViewGamePage.getBoundsInParent().getMinX() + playerViewGamePage.getBoundsInParent().getWidth());
                     playerInverted = true;
                     playerViewGamePage.setTranslateY(playerViewGamePage.getTranslateY() + playerViewGamePage.getBoundsInParent().getHeight());
                     playerViewGamePage.setScaleY(playerViewGamePage.getScaleY()*(-1));
 
                 }
                 else if(spaceKeyPressedAgain.getCode() == KeyCode.SPACE && playerMoving && playerInverted && playerIsBetween(currentPillar.getX() + currentPillar.getWidth(), nextPillar.getX())){
-                    System.out.println("X coords of initial pillar : " + currentPillar.getBoundsInParent().getMinX());
-                    System.out.println("X coords of next pillar : " + nextPillar.getBoundsInParent().getMinX());
-                    System.out.println("X coords of player : " + playerViewGamePage.getBoundsInParent().getMinX());
-                    System.out.println("X coords of player : " + playerViewGamePage.getBoundsInParent().getMinX() + playerViewGamePage.getBoundsInParent().getWidth());
                     playerInverted = false;
                     playerViewGamePage.setTranslateY(playerViewGamePage.getTranslateY() - playerViewGamePage.getBoundsInParent().getHeight());
                     playerViewGamePage.setScaleY(playerViewGamePage.getScaleY()*(-1));
@@ -175,26 +167,18 @@ public class GamePageController implements Initializable {
             });
             timeline.setOnFinished(stoppedMoving->{
                 playerMoving = false;
+                System.out.println("Can't invert now...");
                 playerViewGamePage.setFocusTraversable(false);
                 checkPlayer();
             });
         });
         timeline.play();
-
-
-
     }
 
     private boolean playerLanded(){
 
         double x_i_player = playerViewGamePage.getBoundsInParent().getMinX() + 10;
-        double x_e_player = playerViewGamePage.getBoundsInParent().getMinX() + playerViewGamePage.getBoundsInParent().getWidth() - 10;
-
-        boolean i_in = x_i_player >= nextPillar.getBoundsInParent().getMinX() && x_i_player <= nextPillar.getBoundsInParent().getMinX() + nextPillar.getBoundsInParent().getWidth();
-        boolean ex_in = x_e_player >= nextPillar.getBoundsInParent().getMinX() && x_e_player <= nextPillar.getBoundsInParent().getMinX() + nextPillar.getBoundsInParent().getWidth();
-
-        return i_in || ex_in;
-
+        return x_i_player >= nextPillar.getBoundsInParent().getMinX() && x_i_player <= nextPillar.getBoundsInParent().getMinX() + nextPillar.getBoundsInParent().getWidth();
     }
 
     private void checkPlayer(){
