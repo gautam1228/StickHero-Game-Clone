@@ -110,7 +110,70 @@ public class StartPageController implements Initializable {
         }
 
     }
+public void howToPlay(ActionEvent event) throws IOException {
+    Stage popUpInfoPage = new Stage();
+    //popUpInfoPage.initStyle(StageStyle.UNDECORATED);
+    popUpInfoPage.initModality(Modality.APPLICATION_MODAL);
+    popUpInfoPage.setTitle("Info Page");
 
+    AnchorPane infoPageLayout = new AnchorPane();
+
+    TextArea termsAndConditionsTextArea = new TextArea();
+    termsAndConditionsTextArea.setText(
+            "How to Play:\n" +
+                    "\n"+
+                    "Start the Game:\n" +
+                    "\n" +
+                    "Press the space bar to extend the stick and start the game.\n" +
+                    "\n" +
+                    "Extend the Stick:\n" +
+                    "\n" +
+                    "Tap the space bar to extend the stick. The longer you hold, the longer the stick becomes.\n" +
+                    "\n" +
+                    "Land on Platforms:\n" +
+                    "\n" +
+                    "Time your stick extension to land on platforms and keep the character moving forward.\n" +
+                    "\n" +
+                    "Beat Your High Score:\n" +
+                    "\n" +
+                    "Challenge yourself to beat your own high score with each attempt.\n" +
+                    "\n" +
+                    "Avoid Falling into the Void:\n" +
+                    "\n" +
+                    "Be cautious! If you fail to land on a platform, the character will fall into the void, and the game will end.\n"
+    );
+
+    termsAndConditionsTextArea.setWrapText(true);
+    termsAndConditionsTextArea.setEditable(false);
+
+    ScrollPane scrollPane = new ScrollPane(termsAndConditionsTextArea);
+    scrollPane.setFitToHeight(true);
+    scrollPane.setFitToWidth(true);
+
+    scrollPane.setPrefSize(400, 400);
+
+    infoPageLayout.getChildren().add(scrollPane);
+
+    Button okButton = new Button("OK");
+    okButton.setOnAction(e -> popUpInfoPage.close());
+    okButton.setStyle("-fx-font-size: 14px; -fx-min-width: 60px; -fx-min-height: 30px;");
+
+
+    infoPageLayout.getChildren().add(okButton);
+
+    AnchorPane.setBottomAnchor(okButton, 10.0);
+    AnchorPane.setRightAnchor(okButton, 10.0);
+
+    AnchorPane.setTopAnchor(scrollPane, 10.0);
+    AnchorPane.setBottomAnchor(scrollPane, 50.0);
+    AnchorPane.setLeftAnchor(scrollPane, 10.0);
+    AnchorPane.setRightAnchor(scrollPane, 10.0);
+
+    Scene popupScene = new Scene(infoPageLayout, 400, 400);
+    popUpInfoPage.setScene(popupScene);
+
+    popUpInfoPage.show();
+}
     // Info-Page-Button
     public void infoPage(ActionEvent event) throws IOException {
 
