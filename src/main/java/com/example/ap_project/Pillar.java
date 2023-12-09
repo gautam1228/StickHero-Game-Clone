@@ -13,7 +13,7 @@ public class Pillar extends Rectangle {
 
     private static final Random random = new Random();
 
-    private static Rectangle platform;
+    private static Rectangle pillar;
 
     public Pillar(int x, int y , int width, int height) {
 
@@ -23,34 +23,34 @@ public class Pillar extends Rectangle {
 
     public static Rectangle generateNormalPillar(){
 
-        platform = new Pillar(0 , 410, 155, 390);
+        pillar = new Pillar(0 , 411, 155, 390);
 
         setFillColor("#2b2b2b");
 
-        return platform;
+        return pillar;
 
     }
 
     public static Rectangle generateRandomPillar() {
 
         int minX = 165;
-        int maxX = 576;
+        int maxX = 550;
 
         // Ensuring that the platform is completely within the screen horizontally
         int x = (int) (random.nextDouble() * (maxX - minX) + minX);
 
         int y = 411;
 
-        // Ensuring a minimum width of 24
-        int minWidth = 24;
+        // Ensuring a minimum width of 50
+        int minWidth = 50;
         int maxWidth = maxX - x;
         int platformWidth = Math.max(minWidth, (int) (random.nextDouble() * maxWidth));
 
-        platform = new Pillar(x, y, platformWidth, PLATFORM_HEIGHT);
+        pillar = new Pillar(x, y, platformWidth, PLATFORM_HEIGHT);
 
         setFillColor("#2b2b2b");
 
-        return platform;
+        return pillar;
 
     }
 
@@ -64,21 +64,21 @@ public class Pillar extends Rectangle {
 
         int y = 411;
 
-        // Ensuring a minimum width of 24
-        int minWidth = 24;
+        // Ensuring a minimum width of 50
+        int minWidth = 50;
         int maxWidth = maxX - x;
         int platformWidth = Math.max(minWidth, (int) (random.nextDouble() * maxWidth));
 
-        platform = new Rectangle(x, y, platformWidth, PLATFORM_HEIGHT);
+        pillar = new Pillar(x, y, platformWidth, PLATFORM_HEIGHT);
 
         setFillColor("#2b2b2b");
 
-        return platform;
+        return pillar;
 
     }
 
     public void addToPane(AnchorPane pane) {
-        pane.getChildren().add(platform);
+        pane.getChildren().add(pillar);
     }
 
     public void removeFromPane(AnchorPane pane, Pillar pillarToBeRemoved){
@@ -87,7 +87,7 @@ public class Pillar extends Rectangle {
 
     private static void setFillColor(String hexColor) {
         Color color = Color.web(hexColor);
-        platform.setFill(color);
+        pillar.setFill(color);
     }
 
 }

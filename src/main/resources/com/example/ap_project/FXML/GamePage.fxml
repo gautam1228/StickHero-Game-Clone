@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="GamePage" prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ap_project.GamePageController">
    <children>
       <ImageView fx:id="playerViewGamePage" fitHeight="55.0" fitWidth="46.0" layoutX="55.0" layoutY="356.0" pickOnBounds="true" />
+      <Label fx:id="scoreLabel" alignment="CENTER" layoutX="231.0" layoutY="34.0" prefHeight="88.0" prefWidth="137.0" text="SCORE : 0">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

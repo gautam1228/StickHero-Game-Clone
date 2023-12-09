@@ -4,11 +4,11 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
@@ -27,6 +27,8 @@ public class GamePageController implements Initializable {
     private boolean spaceKeyReleased = false;
     private Stage stage;
     @FXML
+    private Label scoreLabel;
+    @FXML
     private AnchorPane GamePage;
     @FXML
     private ImageView playerViewGamePage;
@@ -40,21 +42,28 @@ public class GamePageController implements Initializable {
     private boolean playerInverted;
     private Pillar nextPillar;
     private boolean gameOver;
+    private  int Score;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         currPlayer = Player.getInstance();
+
         boolean spaceKeyPressed = false;
+
         currentPillar = (Pillar) Pillar.generateNormalPillar();
         nextPillar = (Pillar) Pillar.generateRandomPillar();
+
         currentStick = new Stick();
+
         GamePage.getChildren().addAll(currentPillar, currentStick, nextPillar);
         playerViewGamePage.setImage(currPlayer.getCurrentSkin());
+
         playerMoving = false;
         playerInverted = false;
-        System.out.println("Next Pillar's X-cord : " + nextPillar.getX());
         gameOver = false;
+
+        Score = 0;
 
     }
     // Method to set the stage
@@ -98,10 +107,11 @@ public class GamePageController implements Initializable {
     }
 
     private boolean playerIsBetween(double i_x, double f_x){
-        double curr_i_x = playerViewGamePage.getBoundsInParent().getMinX();
-        double curr_e_x = curr_i_x + 46;
-        System.out.println("Player's curr Position :" + curr_i_x);
-        return curr_i_x >= i_x && curr_e_x <= f_x;
+
+        double curr_i_x = playerViewGamePage.getBoundsInParent().getMinX() + 15;
+        double curr_e_x = curr_i_x + 46 - 15;
+        return curr_i_x >= i_x && curr_e_x <= f_x ;
+
     }
 
     private void stopExtendingStick() {
@@ -144,18 +154,24 @@ public class GamePageController implements Initializable {
             playerViewGamePage.setOnKeyPressed(spaceKeyPressedAgain->{
 
                 if(spaceKeyPressedAgain.getCode() == KeyCode.SPACE && playerMoving && !playerInverted && playerIsBetween(currentPillar.getX() + currentPillar.getWidth(), nextPillar.getX())){
+                    System.out.println("X coords of initial pillar : " + currentPillar.getBoundsInParent().getMinX());
+                    System.out.println("X coords of next pillar : " + nextPillar.getBoundsInParent().getMinX());
+                    System.out.println("X coords of player : " + playerViewGamePage.getBoundsInParent().getMinX());
+                    System.out.println("X coords of player : " + playerViewGamePage.getBoundsInParent().getMinX() + playerViewGamePage.getBoundsInParent().getWidth());
                     playerInverted = true;
                     playerViewGamePage.setTranslateY(playerViewGamePage.getTranslateY() + playerViewGamePage.getBoundsInParent().getHeight());
                     playerViewGamePage.setScaleY(playerViewGamePage.getScaleY()*(-1));
 
                 }
                 else if(spaceKeyPressedAgain.getCode() == KeyCode.SPACE && playerMoving && playerInverted && playerIsBetween(currentPillar.getX() + currentPillar.getWidth(), nextPillar.getX())){
+                    System.out.println("X coords of initial pillar : " + currentPillar.getBoundsInParent().getMinX());
+                    System.out.println("X coords of next pillar : " + nextPillar.getBoundsInParent().getMinX());
+                    System.out.println("X coords of player : " + playerViewGamePage.getBoundsInParent().getMinX());
+                    System.out.println("X coords of player : " + playerViewGamePage.getBoundsInParent().getMinX() + playerViewGamePage.getBoundsInParent().getWidth());
                     playerInverted = false;
                     playerViewGamePage.setTranslateY(playerViewGamePage.getTranslateY() - playerViewGamePage.getBoundsInParent().getHeight());
                     playerViewGamePage.setScaleY(playerViewGamePage.getScaleY()*(-1));
-
                 }
-
             });
             timeline.setOnFinished(stoppedMoving->{
                 playerMoving = false;
@@ -169,58 +185,90 @@ public class GamePageController implements Initializable {
 
     }
 
+    private boolean playerLanded(){
+
+        double x_i_player = playerViewGamePage.getBoundsInParent().getMinX() + 10;
+        double x_e_player = playerViewGamePage.getBoundsInParent().getMinX() + playerViewGamePage.getBoundsInParent().getWidth() - 10;
+
+        boolean i_in = x_i_player >= nextPillar.getBoundsInParent().getMinX() && x_i_player <= nextPillar.getBoundsInParent().getMinX() + nextPillar.getBoundsInParent().getWidth();
+        boolean ex_in = x_e_player >= nextPillar.getBoundsInParent().getMinX() && x_e_player <= nextPillar.getBoundsInParent().getMinX() + nextPillar.getBoundsInParent().getWidth();
+
+        return i_in || ex_in;
+
+    }
+
     private void checkPlayer(){
         double x_i_nextPillar = nextPillar.getBoundsInParent().getMinX();
         double x_e_nextPillar = x_i_nextPillar + nextPillar.getWidth();
 
-        if(playerIsBetween(x_i_nextPillar, x_e_nextPillar)){
+        if(playerLanded() && !playerInverted){
             // Continued logic
+            Score++;
+            scoreLabel.setText("Score : " + Score);
             gameOver = false;
-            Pillar nextPillarToCome = (Pillar) Pillar.generateRandomPillar();
+            Pillar nextPillarToCome = (Pillar) Pillar.generateNextPlatform(165, 550);
+            GamePage.getChildren().add(nextPillarToCome);
+            TranslateTransition translateCurrentPillar = new TranslateTransition(Duration.seconds(1), currentPillar);
+            translateCurrentPillar.setByX(-170);
 
+            TranslateTransition translateNextPillar = new TranslateTransition(Duration.seconds(1),nextPillar);
+            double x_move = nextPillar.getBoundsInParent().getMinX() + nextPillar.getBoundsInParent().getWidth() - 160;
+            translateNextPillar.setByX(-x_move);
+
+            TranslateTransition translateNextPillarToCome = new TranslateTransition(Duration.seconds(1), nextPillarToCome);
+            translateNextPillarToCome.setByX(-600);
+
+            TranslateTransition translatePlayer = new TranslateTransition(Duration.seconds(1), playerViewGamePage);
+            double x_to_move_player = playerViewGamePage.getBoundsInParent().getMinX() + playerViewGamePage.getBoundsInParent().getWidth() - 101;
+            translatePlayer.setByX(-x_to_move_player);
+
+            TranslateTransition translateStick = new TranslateTransition(Duration.seconds(1), currentStick);
+            translateStick.setByX(-x_to_move_player);
+
+            translateCurrentPillar.play();
+            translateNextPillar.play();
+            translateNextPillarToCome.play();
+            translatePlayer.play();
+            translateStick.play();
+
+            translateStick.setOnFinished(e->{
+                GamePage.getChildren().remove(currentStick);
+                currentStick = new Stick();
+                GamePage.getChildren().add(currentStick);
+            });
+
+            translateCurrentPillar.setOnFinished(e->{
+                GamePage.getChildren().remove(currentPillar);
+                currentPillar = nextPillar;
+            });
+            nextPillar = nextPillarToCome;
+            spaceKeyPressed = false;
+            spaceKeyReleased = false;
         }
-        else{
+        else {
             gameOver = true;
-            Stage gameOverPage = new Stage();
-            gameOverPage.initModality(Modality.APPLICATION_MODAL);
-            gameOverPage.setTitle("Game Over Page");
 
-            Button closeButton = new Button("Close");
-            closeButton.setOnAction(e -> gameOverPage.close());
+            TranslateTransition translatePlayer = new TranslateTransition(Duration.millis(500), playerViewGamePage);
+            translatePlayer.setByY(411);
+            translatePlayer.play();
+            translatePlayer.setOnFinished(e->{
+                Stage gameOverPage = new Stage();
+                gameOverPage.initModality(Modality.APPLICATION_MODAL);
+                gameOverPage.setTitle("Game Over Page");
 
-            AnchorPane gameOverLayout = new AnchorPane();
-            gameOverLayout.getChildren().add(closeButton);
+                Button closeButton = new Button("Close");
+                closeButton.setOnAction(event -> gameOverPage.close());
 
-            Scene gameOverScene = new Scene(gameOverLayout, 600, 300);
-            gameOverPage.setScene(gameOverScene);
-            gameOverPage.show();
+                AnchorPane gameOverLayout = new AnchorPane();
+                gameOverLayout.getChildren().add(closeButton);
 
-        }
-    }
+                Scene gameOverScene = new Scene(gameOverLayout, 600, 300);
+                gameOverPage.setScene(gameOverScene);
+                gameOverPage.show();
 
-    private void updateGame(){
-
-        double curr_player_x = playerViewGamePage.getBoundsInParent().getMinX();
-
-        // Endless loop until game over.
-
-        if( curr_player_x >= nextPillar.getLayoutX() && curr_player_x <= nextPillar.getX() + nextPillar.getWidth() ){
-
-
+            });
 
         }
-
-        if(!gameOver) {
-
-
-
-        }
-        else{
-
-            // Show the new pop-up screen to be added after the game is over.
-
-        }
-
     }
 
 }

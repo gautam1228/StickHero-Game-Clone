@@ -1,5 +1,6 @@
 package com.example.ap_project;
 
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
@@ -13,5 +14,11 @@ public class Stick extends Line {
 
     public void extend(int extension) {
         setStartY(getStartY() - extension); // Increase height in the upward direction
+    }
+
+    public void removeFromPane(Pane pane){
+
+        pane.getChildren().remove(this);
+
     }
 }
