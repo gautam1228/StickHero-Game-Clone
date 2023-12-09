@@ -49,7 +49,9 @@ public class Main extends Application {
             System.out.println(failure.toString());
         }
         if(result.wasSuccessful()) {
-            System.out.println("junit tested succesfully for single instance of player class and player class working.");
+            System.out.println("junit tested succesful:-");
+            System.out.println("1. singleton design pattern tested");
+            System.out.println("2. player class methods functionality tested");
         }
         currPlayer.setAvailableCherries(10);
         launch(args);
