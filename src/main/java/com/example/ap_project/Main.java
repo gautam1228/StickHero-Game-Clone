@@ -7,6 +7,9 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.junit.runner.JUnitCore;
+import org.junit.runner.Result;
+import org.junit.runner.notification.Failure;
 
 import java.util.Objects;
 
@@ -40,8 +43,14 @@ public class Main extends Application {
     }
     public static void main(String[] args) {
         Player currPlayer = currPlayerInstance;
-        //new resources added
-        // Setting current cherries to 10.
+        String testClassName = "com.example.ap_project.PlayerTest";
+        Result result = JUnitCore.runClasses(PlayerTest.class.getClasses());
+        for (Failure failure: result.getFailures()){
+            System.out.println(failure.toString());
+        }
+        if(result.wasSuccessful()) {
+            System.out.println("junit tested succesfully for single instance of player class and player class working.");
+        }
         currPlayer.setAvailableCherries(10);
         launch(args);
     }
