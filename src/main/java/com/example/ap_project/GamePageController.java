@@ -192,12 +192,9 @@ public class GamePageController implements Initializable {
             gameOver = false;
             Pillar nextPillarToCome = (Pillar) Pillar.generateNextPlatform(165, 550);
             GamePage.getChildren().add(nextPillarToCome);
-            TranslateTransition translateCurrentPillar = new TranslateTransition(Duration.seconds(1), currentPillar);
-            translateCurrentPillar.setByX(-170);
 
             TranslateTransition translateNextPillar = new TranslateTransition(Duration.seconds(1),nextPillar);
-            double x_move = nextPillar.getBoundsInParent().getMinX() + nextPillar.getBoundsInParent().getWidth() - 160;
-            translateNextPillar.setByX(-x_move);
+            translateNextPillar.setByX(-600);
 
             TranslateTransition translateNextPillarToCome = new TranslateTransition(Duration.seconds(1), nextPillarToCome);
             translateNextPillarToCome.setByX(-600);
@@ -209,7 +206,6 @@ public class GamePageController implements Initializable {
             TranslateTransition translateStick = new TranslateTransition(Duration.seconds(1), currentStick);
             translateStick.setByX(-x_to_move_player);
 
-            translateCurrentPillar.play();
             translateNextPillar.play();
             translateNextPillarToCome.play();
             translatePlayer.play();
@@ -221,13 +217,11 @@ public class GamePageController implements Initializable {
                 GamePage.getChildren().add(currentStick);
             });
 
-            translateCurrentPillar.setOnFinished(e->{
-                GamePage.getChildren().remove(currentPillar);
-                currentPillar = nextPillar;
-            });
             nextPillar = nextPillarToCome;
+
             spaceKeyPressed = false;
             spaceKeyReleased = false;
+
         }
         else {
             gameOver = true;
