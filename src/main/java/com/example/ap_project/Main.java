@@ -12,6 +12,9 @@ import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
 import java.util.Objects;
+//    DESIGN PATTERN USED:
+//            1. singleton - creates only one player instances
+//            2. flyweight - to ensure user doesnot have to buy same skin twice or more
 
 public class Main extends Application {
     public static Player currPlayerInstance = Player.getInstance();
@@ -45,6 +48,9 @@ public class Main extends Application {
 
         }
     }
+//    DESIGN PATTERN USED:
+//            1. singleton - creates only one player instances
+//            2. flyweight - to ensure user doesnot have to buy same skin twice or more
     public static void main(String[] args) {
         Player currPlayer = currPlayerInstance;
         String testClassName = "com.example.ap_project.PlayerTest";

@@ -24,7 +24,7 @@ import javafx.util.Duration;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class GamePageController implements Initializable {
+public class GamePageController implements Initializable , playerGameplay {
     private boolean spaceKeyPressed = false;
     private boolean spaceKeyReleased = false;
     private Stage stage;
@@ -97,7 +97,7 @@ public class GamePageController implements Initializable {
         }
     }
 
-    private void startExtendingStick() {
+    public void startExtendingStick() {
         extendTimeline = new Timeline(new KeyFrame(
                 Duration.millis(10), // Duration at which the height will be updated
                 event -> {
@@ -116,14 +116,14 @@ public class GamePageController implements Initializable {
 
     }
 
-    private void stopExtendingStick() {
+    public void stopExtendingStick() {
         if (extendTimeline != null) {
             extendTimeline.stop();
             movePlayer();
         }
     }
 
-    private void movePlayer(){
+    public void movePlayer(){
 
         distanceToBeMovedByPlayer = 413 + 55 + 25 - currentStick.getStartY();
 //            new Thread(()->{
@@ -177,7 +177,7 @@ public class GamePageController implements Initializable {
         timeline.play();
     }
 
-    private boolean playerLanded(){
+    public boolean playerLanded(){
 
         double x_i_player = playerViewGamePage.getBoundsInParent().getMinX() + 10;
         return x_i_player >= nextPillar.getBoundsInParent().getMinX() && x_i_player <= nextPillar.getBoundsInParent().getMinX() + nextPillar.getBoundsInParent().getWidth();
