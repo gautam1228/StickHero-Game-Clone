@@ -34,7 +34,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="howToPlayButton" layoutX="28.0" layoutY="554.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0">
+      <Button fx:id="howToPlayButton" layoutX="28.0" layoutY="554.0"  onAction="#howToPlay" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0">
          <graphic>
             <ImageView fitHeight="29.0" fitWidth="23.0" opacity="0.65" pickOnBounds="true" preserveRatio="true">
                <image>
