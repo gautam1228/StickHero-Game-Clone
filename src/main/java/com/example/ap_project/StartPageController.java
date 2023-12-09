@@ -1,5 +1,6 @@
 package com.example.ap_project;
 
+import javafx.scene.media.*;
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -48,9 +49,26 @@ public class StartPageController implements Initializable {
     private ImageView playerView;
     private Image muted;
     private Image unmuted;
-    private boolean Mute;
+    public static boolean Mute;
+    private MediaPlayer clickSoundPlayer;
+    private MediaPlayer backgroundSong;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        ImageView backgroundImage = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Background-Images/background-1.jpg"))));
+        backgroundImage.setFitHeight(800);
+        backgroundImage.setFitWidth(600);
+        startPage.getChildren().add(backgroundImage);
+        backgroundImage.toBack();
+
+        String backgroundSoundFile = Objects.requireNonNull(getClass().getResource("Sounds/bg_song.mp3")).toString();
+        Media bg_music = new Media(backgroundSoundFile);
+        backgroundSong = new MediaPlayer(bg_music);
+        backgroundSong.play();
+        backgroundSong.setOnEndOfMedia(()->{
+            backgroundSong.seek(Duration.ZERO);
+            backgroundSong.play();
+        });
 
         Mute = false;
         muted = new Image(Objects.requireNonNull(getClass().getResourceAsStream("Icons/no-sound-icon.png")));
@@ -70,6 +88,9 @@ public class StartPageController implements Initializable {
 
         fadeTransition.setOnFinished((ActionEvent eventNew) -> {
             try {
+                String clickSoundFile = Objects.requireNonNull(getClass().getResource("Sounds/click.wav")).toString();
+                Media md1 = new Media(clickSoundFile);
+                clickSoundPlayer = new MediaPlayer(md1);
                 loadGamePage(event);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -79,6 +100,11 @@ public class StartPageController implements Initializable {
     }
     // Play-Game-Button
     private void loadGamePage(ActionEvent event) throws IOException {
+
+        if(!Mute) {
+            clickSoundPlayer.play();
+        }
+        backgroundSong.stop();
         FXMLLoader gamePageLoader = new FXMLLoader(getClass().getResource("FXML/GamePage.fxml"));
         Parent root = gamePageLoader.load();
 
@@ -101,11 +127,14 @@ public class StartPageController implements Initializable {
     public void soundChange(ActionEvent event) throws IOException {
 
         if(Mute){
+            backgroundSong.seek(Duration.ZERO);
+            backgroundSong.play();
             Mute = false;
             soundStatusImage.setImage(unmuted);
         }
         else{
             Mute = true;
+            backgroundSong.stop();
             soundStatusImage.setImage(muted);
         }
 

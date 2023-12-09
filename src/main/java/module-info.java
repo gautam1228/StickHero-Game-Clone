@@ -8,6 +8,7 @@ module com.example.ap_project {
     requires com.almasb.fxgl.all;
     requires org.testng;
     requires junit;
+    requires javafx.media;
 
     opens com.example.ap_project to javafx.fxml;
     exports com.example.ap_project;

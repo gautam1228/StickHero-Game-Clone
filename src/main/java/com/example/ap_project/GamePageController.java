@@ -5,23 +5,32 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class GamePageController implements Initializable {
@@ -45,11 +54,27 @@ public class GamePageController implements Initializable {
     private Pillar nextPillar;
     private boolean gameOver;
     private  int Score;
+    private ImageView cherryReward;
+    private boolean Mute;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        String backgroundSoundFile1 = Objects.requireNonNull(getClass().getResource("Sounds/gameplaySong.mp3")).toString();
+        Media bg_music = new Media(backgroundSoundFile1);
+        MediaPlayer backgroundSong = new MediaPlayer(bg_music);
+
         currPlayer = Player.getInstance();
+
+        Mute = StartPageController.Mute;
+
+        if(!Mute){
+            backgroundSong.play();
+            backgroundSong.setOnEndOfMedia(()->{
+                backgroundSong.seek(Duration.ZERO);
+                backgroundSong.play();
+            });
+        }
 
         boolean spaceKeyPressed = false;
 
@@ -80,7 +105,6 @@ public class GamePageController implements Initializable {
             stage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
                 if (event.getCode() == KeyCode.SPACE && !spaceKeyPressed) {
                     // Handling "Space" key press
-                    System.out.println("Extending stick...");
                     startExtendingStick();
                     spaceKeyPressed = true;
                 }
@@ -88,8 +112,7 @@ public class GamePageController implements Initializable {
 
             stage.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
                 if (event.getCode() == KeyCode.SPACE && !spaceKeyReleased) {
-                    // Handling "Space" key release
-                    System.out.println("Stopped extending.....");
+                    // Handling "Space" key release.
                     stopExtendingStick();
                     spaceKeyReleased = true;
                 }
@@ -123,7 +146,7 @@ public class GamePageController implements Initializable {
         }
     }
 
-    private void movePlayer(){
+    private void movePlayer() {
 
         distanceToBeMovedByPlayer = 413 + 55 + 25 - currentStick.getStartY();
 //            new Thread(()->{
@@ -132,7 +155,7 @@ public class GamePageController implements Initializable {
 //
 //                });
 //            }).start();
-        Rotate rotate = new Rotate(0, 150,411);
+        Rotate rotate = new Rotate(0, 150, 411);
         currentStick.getTransforms().add(rotate);
 
         Translate translate = new Translate();
@@ -147,29 +170,25 @@ public class GamePageController implements Initializable {
         Timeline timeline = new Timeline();
         timeline.getKeyFrames().addAll(rotateKeyFrame);
         timeline.setCycleCount(1);
-        timeline.setOnFinished(event->{
+        timeline.setOnFinished(event -> {
             timeline.getKeyFrames().clear();
             timeline.getKeyFrames().add(translateKeyFrame);
             timeline.play();
             playerMoving = true;
             playerViewGamePage.setFocusTraversable(true);
-            System.out.println("Can Invert now....");
-            playerViewGamePage.setOnKeyPressed(spaceKeyPressedAgain->{
-                if(spaceKeyPressedAgain.getCode() == KeyCode.SPACE && playerMoving && !playerInverted && playerIsBetween(currentPillar.getX() + currentPillar.getWidth(), nextPillar.getX())){
+            playerViewGamePage.setOnKeyPressed(spaceKeyPressedAgain -> {
+                if (spaceKeyPressedAgain.getCode() == KeyCode.SPACE && playerMoving && !playerInverted && playerIsBetween(currentPillar.getX() + currentPillar.getWidth(), nextPillar.getX())) {
                     playerInverted = true;
                     playerViewGamePage.setTranslateY(playerViewGamePage.getTranslateY() + playerViewGamePage.getBoundsInParent().getHeight());
-                    playerViewGamePage.setScaleY(playerViewGamePage.getScaleY()*(-1));
-
-                }
-                else if(spaceKeyPressedAgain.getCode() == KeyCode.SPACE && playerMoving && playerInverted && playerIsBetween(currentPillar.getX() + currentPillar.getWidth(), nextPillar.getX())){
+                    playerViewGamePage.setScaleY(playerViewGamePage.getScaleY() * (-1));
+                } else if (spaceKeyPressedAgain.getCode() == KeyCode.SPACE && playerMoving && playerInverted && playerIsBetween(currentPillar.getX() + currentPillar.getWidth(), nextPillar.getX())) {
                     playerInverted = false;
                     playerViewGamePage.setTranslateY(playerViewGamePage.getTranslateY() - playerViewGamePage.getBoundsInParent().getHeight());
-                    playerViewGamePage.setScaleY(playerViewGamePage.getScaleY()*(-1));
+                    playerViewGamePage.setScaleY(playerViewGamePage.getScaleY() * (-1));
                 }
             });
-            timeline.setOnFinished(stoppedMoving->{
+            timeline.setOnFinished(stoppedMoving -> {
                 playerMoving = false;
-                System.out.println("Can't invert now...");
                 playerViewGamePage.setFocusTraversable(false);
                 checkPlayer();
             });
@@ -180,6 +199,7 @@ public class GamePageController implements Initializable {
     private boolean playerLanded(){
 
         double x_i_player = playerViewGamePage.getBoundsInParent().getMinX() + 10;
+
         return x_i_player >= nextPillar.getBoundsInParent().getMinX() && x_i_player <= nextPillar.getBoundsInParent().getMinX() + nextPillar.getBoundsInParent().getWidth();
     }
 
@@ -195,7 +215,9 @@ public class GamePageController implements Initializable {
             Pillar nextPillarToCome = (Pillar) Pillar.generateNextPlatform(165, 550);
             GamePage.getChildren().add(nextPillarToCome);
 
-            TranslateTransition translateNextPillar = new TranslateTransition(Duration.seconds(1),nextPillar);
+            cherryReward = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Icons/cherries.png"))));
+
+            TranslateTransition translateNextPillar = new TranslateTransition(Duration.millis(1200),nextPillar);
             translateNextPillar.setByX(-600);
 
             TranslateTransition translateNextPillarToCome = new TranslateTransition(Duration.seconds(1), nextPillarToCome);
@@ -208,6 +230,29 @@ public class GamePageController implements Initializable {
             TranslateTransition translateStick = new TranslateTransition(Duration.seconds(1), currentStick);
             translateStick.setByX(-x_to_move_player);
 
+            TranslateTransition translateCherry = new TranslateTransition(Duration.seconds(1), cherryReward);
+            translateCherry.setByX(-600);
+
+            double startX = 155;
+            double endX = nextPillarToCome.getBoundsInParent().getMinX();
+
+            // adding the cherries.
+            if(endX - startX - 600 >= 150){
+
+                double randomX = Math.random()*(endX - startX - 600) + startX;
+
+                cherryReward.setFitWidth(25);
+                cherryReward.setFitHeight(25);
+                cherryReward.setFitHeight(25);
+
+                cherryReward.setX(600 + randomX);
+                cherryReward.setY(415);
+
+                GamePage.getChildren().add(cherryReward);
+
+            }
+
+            translateCherry.play();
             translateNextPillar.play();
             translateNextPillarToCome.play();
             translatePlayer.play();
@@ -251,7 +296,9 @@ public class GamePageController implements Initializable {
                 highScoreLabel.setAlignment(Pos.CENTER);
 
                 Button closeButton = new Button("Close");
-                closeButton.setOnAction(event -> gameOverPage.close());
+                closeButton.setOnAction(event -> {
+                    gameOverPage.close();
+                });
 
                 VBox gameOverLayout = new VBox(10);
                 gameOverLayout.getChildren().addAll(messageLabel, scoreLabel,highScoreLabel, closeButton);
