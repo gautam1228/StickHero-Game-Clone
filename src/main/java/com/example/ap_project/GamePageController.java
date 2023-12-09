@@ -6,13 +6,15 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.stage.Modality;
@@ -234,15 +236,27 @@ public class GamePageController implements Initializable {
                 gameOverPage.initModality(Modality.APPLICATION_MODAL);
                 gameOverPage.setTitle("Game Over Page");
 
+                int finalScore = Score;
+
+                Label messageLabel = new Label("Game Over");
+                messageLabel.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
+                messageLabel.setAlignment(Pos.CENTER);
+
+                Label scoreLabel = new Label("Your Score: " + finalScore);
+                scoreLabel.setStyle("-fx-font-size: 16;");
+                scoreLabel.setAlignment(Pos.CENTER);
+
                 Button closeButton = new Button("Close");
                 closeButton.setOnAction(event -> gameOverPage.close());
 
-                AnchorPane gameOverLayout = new AnchorPane();
-                gameOverLayout.getChildren().add(closeButton);
+                VBox gameOverLayout = new VBox(10);
+                gameOverLayout.getChildren().addAll(messageLabel, scoreLabel, closeButton);
+                gameOverLayout.setAlignment(Pos.CENTER);
 
-                Scene gameOverScene = new Scene(gameOverLayout, 600, 300);
+                Scene gameOverScene = new Scene(gameOverLayout, 300, 150);
                 gameOverPage.setScene(gameOverScene);
                 gameOverPage.show();
+
 
             });
 
