@@ -14,7 +14,9 @@ public class Main extends Application {
     public static Player currPlayerInstance = Player.getInstance();
     @Override
     public void start(Stage mainStage) throws Exception {
+
         try {
+
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("FXML/StartPage.fxml")));
             Scene scene = new Scene(root);
 
@@ -35,7 +37,9 @@ public class Main extends Application {
 
         }
         catch(Exception e){
+
             System.out.println(e.getMessage());
+
         }
     }
     public static void main(String[] args) {

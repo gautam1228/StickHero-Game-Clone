@@ -3,22 +3,24 @@ package com.example.ap_project;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GamePageController implements Initializable {
     private boolean spaceKeyPressed = false;
@@ -29,27 +31,31 @@ public class GamePageController implements Initializable {
     @FXML
     private ImageView playerViewGamePage;
     @FXML
-    private Rectangle initialPillar;
+    private Pillar currentPillar;
     private Timeline extendTimeline;
     private Stick currentStick;
     private Player currPlayer;
-    private double distanceToBeMoved;
+    private double distanceToBeMovedByPlayer;
     private boolean playerMoving;
     private boolean playerInverted;
     private Pillar nextPillar;
+    private boolean gameOver;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         currPlayer = Player.getInstance();
         boolean spaceKeyPressed = false;
-        nextPillar = new Pillar();
+        currentPillar = (Pillar) Pillar.generateNormalPillar();
+        nextPillar = (Pillar) Pillar.generateRandomPillar();
         currentStick = new Stick();
-        nextPillar.addToPane(GamePage);
-        GamePage.getChildren().add(currentStick);
+        GamePage.getChildren().addAll(currentPillar, currentStick, nextPillar);
         playerViewGamePage.setImage(currPlayer.getCurrentSkin());
         playerMoving = false;
         playerInverted = false;
         System.out.println("Next Pillar's X-cord : " + nextPillar.getX());
+        gameOver = false;
+
     }
     // Method to set the stage
     public void setStage(Stage stage) {
@@ -63,6 +69,7 @@ public class GamePageController implements Initializable {
             stage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
                 if (event.getCode() == KeyCode.SPACE && !spaceKeyPressed) {
                     // Handling "Space" key press
+                    System.out.println("Extending stick...");
                     startExtendingStick();
                     spaceKeyPressed = true;
                 }
@@ -71,6 +78,7 @@ public class GamePageController implements Initializable {
             stage.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
                 if (event.getCode() == KeyCode.SPACE && !spaceKeyReleased) {
                     // Handling "Space" key release
+                    System.out.println("Stopped extending.....");
                     stopExtendingStick();
                     spaceKeyReleased = true;
                 }
@@ -99,67 +107,120 @@ public class GamePageController implements Initializable {
     private void stopExtendingStick() {
         if (extendTimeline != null) {
             extendTimeline.stop();
-            // Creating a different thread to first calculate how much the player has to move and then update the UI.
             movePlayer();
         }
     }
 
-
     private void movePlayer(){
-        new Thread(()->{
 
-            synchronized (this){
-                distanceToBeMoved = 413 + 55 + 25 - currentStick.getStartY(); // added the 50 because it's the image width.
-            }
+        distanceToBeMovedByPlayer = 413 + 55 + 25 - currentStick.getStartY();
+//            new Thread(()->{
+//                // Updating UI Elements.
+//                Platform.runLater(()->{
+//
+//                });
+//            }).start();
+        Rotate rotate = new Rotate(0, 150,411);
+        currentStick.getTransforms().add(rotate);
 
-            // Updating UI Elements.
-            Platform.runLater(()->{
-                Rotate rotate = new Rotate(0, 150,411);
-                currentStick.getTransforms().add(rotate);
+        Translate translate = new Translate();
+        translate.setX(0);
+        translate.setY(0);
+        playerViewGamePage.getTransforms().add(translate);
 
-                Translate translate = new Translate();
-                translate.setX(0);
-                translate.setY(0);
-                playerViewGamePage.getTransforms().add(translate);
+        KeyFrame rotateKeyFrame = new KeyFrame(Duration.millis(500), new KeyValue(rotate.angleProperty(), 90));
 
-                KeyFrame rotateKeyFrame = new KeyFrame(Duration.millis(500), new KeyValue(rotate.angleProperty(), 90));
+        KeyFrame translateKeyFrame = new KeyFrame(Duration.millis(1500), new KeyValue(translate.xProperty(), distanceToBeMovedByPlayer));
 
-                KeyFrame translateKeyFrame = new KeyFrame(Duration.millis(1500), new KeyValue(translate.xProperty(), distanceToBeMoved));
+        Timeline timeline = new Timeline();
+        timeline.getKeyFrames().addAll(rotateKeyFrame);
+        timeline.setCycleCount(1);
+        timeline.setOnFinished(event->{
+            timeline.getKeyFrames().clear();
+            timeline.getKeyFrames().add(translateKeyFrame);
+            timeline.play();
+            playerMoving = true;
+            playerViewGamePage.setFocusTraversable(true);
+            playerViewGamePage.setOnKeyPressed(spaceKeyPressedAgain->{
 
-                Timeline timeline = new Timeline();
-                timeline.getKeyFrames().addAll(rotateKeyFrame);
-                timeline.setCycleCount(1);
-                timeline.setOnFinished(event->{
-                    timeline.getKeyFrames().clear();
-                    timeline.getKeyFrames().add(translateKeyFrame);
-                    timeline.play();
-                    playerMoving = true;
-                    playerViewGamePage.setFocusTraversable(true);
-                    playerViewGamePage.setOnKeyPressed(spaceKeyPressedAgain->{
+                if(spaceKeyPressedAgain.getCode() == KeyCode.SPACE && playerMoving && !playerInverted && playerIsBetween(currentPillar.getX() + currentPillar.getWidth(), nextPillar.getX())){
+                    playerInverted = true;
+                    playerViewGamePage.setTranslateY(playerViewGamePage.getTranslateY() + playerViewGamePage.getBoundsInParent().getHeight());
+                    playerViewGamePage.setScaleY(playerViewGamePage.getScaleY()*(-1));
 
-                        if(spaceKeyPressedAgain.getCode() == KeyCode.SPACE && playerMoving && !playerInverted && playerIsBetween(initialPillar.getX() + initialPillar.getWidth(), nextPillar.getX())){
-                            playerInverted = true;
-                            playerViewGamePage.setTranslateY(playerViewGamePage.getTranslateY() + playerViewGamePage.getBoundsInParent().getHeight());
-                            playerViewGamePage.setScaleY(playerViewGamePage.getScaleY()*(-1));
+                }
+                else if(spaceKeyPressedAgain.getCode() == KeyCode.SPACE && playerMoving && playerInverted && playerIsBetween(currentPillar.getX() + currentPillar.getWidth(), nextPillar.getX())){
+                    playerInverted = false;
+                    playerViewGamePage.setTranslateY(playerViewGamePage.getTranslateY() - playerViewGamePage.getBoundsInParent().getHeight());
+                    playerViewGamePage.setScaleY(playerViewGamePage.getScaleY()*(-1));
 
-                        }
-                        else if(spaceKeyPressedAgain.getCode() == KeyCode.SPACE && playerMoving && playerInverted && playerIsBetween(initialPillar.getX() + initialPillar.getWidth(), nextPillar.getX())){
-                            playerInverted = false;
-                            playerViewGamePage.setTranslateY(playerViewGamePage.getTranslateY() - playerViewGamePage.getBoundsInParent().getHeight());
-                            playerViewGamePage.setScaleY(playerViewGamePage.getScaleY()*(-1));
-
-                        }
-
-                    });
-                    timeline.setOnFinished(stoppedMoving->{
-                        playerMoving = false;
-                        playerViewGamePage.setFocusTraversable(false);
-                    });
-                });
-                timeline.play();
+                }
 
             });
+            timeline.setOnFinished(stoppedMoving->{
+                playerMoving = false;
+                playerViewGamePage.setFocusTraversable(false);
+                checkPlayer();
+            });
+        });
+        timeline.play();
 
-        }).start();
+
+
     }
+
+    private void checkPlayer(){
+        double x_i_nextPillar = nextPillar.getBoundsInParent().getMinX();
+        double x_e_nextPillar = x_i_nextPillar + nextPillar.getWidth();
+
+        if(playerIsBetween(x_i_nextPillar, x_e_nextPillar)){
+            // Continued logic
+            gameOver = false;
+            Pillar nextPillarToCome = (Pillar) Pillar.generateRandomPillar();
+
+        }
+        else{
+            gameOver = true;
+            Stage gameOverPage = new Stage();
+            gameOverPage.initModality(Modality.APPLICATION_MODAL);
+            gameOverPage.setTitle("Game Over Page");
+
+            Button closeButton = new Button("Close");
+            closeButton.setOnAction(e -> gameOverPage.close());
+
+            AnchorPane gameOverLayout = new AnchorPane();
+            gameOverLayout.getChildren().add(closeButton);
+
+            Scene gameOverScene = new Scene(gameOverLayout, 600, 300);
+            gameOverPage.setScene(gameOverScene);
+            gameOverPage.show();
+
+        }
+    }
+
+    private void updateGame(){
+
+        double curr_player_x = playerViewGamePage.getBoundsInParent().getMinX();
+
+        // Endless loop until game over.
+
+        if( curr_player_x >= nextPillar.getLayoutX() && curr_player_x <= nextPillar.getX() + nextPillar.getWidth() ){
+
+
+
+        }
+
+        if(!gameOver) {
+
+
+
+        }
+        else{
+
+            // Show the new pop-up screen to be added after the game is over.
+
+        }
+
+    }
+
 }
