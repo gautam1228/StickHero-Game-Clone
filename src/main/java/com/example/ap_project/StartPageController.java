@@ -57,7 +57,7 @@ public class StartPageController implements Initializable {
 
         ImageView backgroundImage = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Background-Images/background-1.jpg"))));
         backgroundImage.setFitHeight(800);
-        backgroundImage.setFitWidth(600);
+        backgroundImage.setFitWidth(700);
         startPage.getChildren().add(backgroundImage);
         backgroundImage.toBack();
 
