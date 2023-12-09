@@ -6,6 +6,7 @@ import java.util.Objects;
 
 public class Player {
     private int availableCherries;
+
     private Image currentSkin = new Image(Objects.requireNonNull(getClass().getResourceAsStream("Skins/Skin-Default.jpg")));
 
     // Private constructor to prevent instantiation outside of this class
@@ -23,10 +24,20 @@ public class Player {
         }
         return instance;
     }
-
+    protected int highScore = 0;
     // Getters and setters for currentSkin.
     public Image getCurrentSkin() {
         return currentSkin;
+    }
+    public void CHeckHighScore(int score){
+        if(highScore>score){
+            return;
+        }
+        this.highScore = score;
+    }
+
+    public int getHighScore() {
+        return highScore;
     }
 
     public void setCurrentSkin(Image currentSkin) {

@@ -237,7 +237,7 @@ public class GamePageController implements Initializable {
                 gameOverPage.setTitle("Game Over Page");
 
                 int finalScore = Score;
-
+                currPlayer.CHeckHighScore(finalScore);
                 Label messageLabel = new Label("Game Over");
                 messageLabel.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
                 messageLabel.setAlignment(Pos.CENTER);
@@ -246,11 +246,15 @@ public class GamePageController implements Initializable {
                 scoreLabel.setStyle("-fx-font-size: 16;");
                 scoreLabel.setAlignment(Pos.CENTER);
 
+                Label highScoreLabel = new Label("High Score: " + currPlayer.getHighScore());
+                highScoreLabel.setStyle("-fx-font-size: 16;");
+                highScoreLabel.setAlignment(Pos.CENTER);
+
                 Button closeButton = new Button("Close");
                 closeButton.setOnAction(event -> gameOverPage.close());
 
                 VBox gameOverLayout = new VBox(10);
-                gameOverLayout.getChildren().addAll(messageLabel, scoreLabel, closeButton);
+                gameOverLayout.getChildren().addAll(messageLabel, scoreLabel,highScoreLabel, closeButton);
                 gameOverLayout.setAlignment(Pos.CENTER);
 
                 Scene gameOverScene = new Scene(gameOverLayout, 300, 150);
